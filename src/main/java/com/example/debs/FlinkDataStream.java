@@ -4,22 +4,16 @@ import com.example.debs.operators.CountAggregator;
 import com.example.debs.operators.MyProcessWindowFunction;
 import com.example.debs.schema.InputMessageDeserializer;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
-import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
-import org.apache.flink.connector.kafka.source.reader.deserializer.KafkaRecordDeserializationSchema;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import com.example.debs.model.InputMessage;
 import org.apache.flink.streaming.api.functions.sink.PrintSinkFunction;
-import org.apache.flink.streaming.api.functions.source.SourceFunction;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
-import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 
-import java.time.Duration;
 import java.time.ZoneOffset;
 
 public class FlinkDataStream {
@@ -45,7 +39,7 @@ public class FlinkDataStream {
         DataStream<InputMessage> inputMessageDataStream = environment.fromSource(kafkaSource,
                 WatermarkStrategy
                     .<InputMessage>forMonotonousTimestamps()
-                    .withTimestampAssigner((message, date) -> message.getDate().toEpochSecond(ZoneOffset.UTC)),
+                    .withTimestampAssigner((message, date) -> message.getDate().toInstant(ZoneOffset.UTC).toEpochMilli()),
                 "Kafka Source");
 
         // count a number of failures per vaultId

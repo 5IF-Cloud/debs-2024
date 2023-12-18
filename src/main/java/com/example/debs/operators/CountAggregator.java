@@ -12,8 +12,8 @@ public class CountAggregator implements AggregateFunction<InputMessage, Tuple2<L
     }
 
     @Override
-    public Tuple2<Long, Long> add(InputMessage inputMessage, Tuple2<Long, Long> accumulator) {
-        return Tuple2.of(inputMessage.getVaultId(), accumulator.f1 + 1L);
+    public Tuple2<Long, Long> add(InputMessage value, Tuple2<Long, Long> accumulator) {
+        return Tuple2.of(value.getVaultId(), accumulator.f1 + 1L);
     }
 
     @Override

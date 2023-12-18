@@ -1,6 +1,5 @@
 package com.example.debs.operators;
 
-import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
@@ -11,9 +10,9 @@ public class MyProcessWindowFunction extends ProcessWindowFunction<Tuple2<Long, 
 
     @Override
     public void process(Long key, Context context, Iterable<Tuple2<Long, Long>> nbFailByVault,
-                        Collector<Tuple3<Long, Long, Long>> collector) throws Exception {
+                        Collector<Tuple3<Long, Long, Long>> collector) {
         for (Tuple2<Long, Long> tuple : nbFailByVault) {
-            collector.collect(new Tuple3<>(tuple.f0, tuple.f1, context.window().getEnd()));
+            collector.collect(new Tuple3<>(context.window().getStart(), tuple.f0, tuple.f1));
         }
     }
 }
