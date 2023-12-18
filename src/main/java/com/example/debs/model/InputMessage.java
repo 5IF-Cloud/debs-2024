@@ -5,21 +5,23 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public class InputMessage {
-    private Long date;
-    private Long failure;
-    private Long vault_id;
+    private LocalDateTime date;
+    private Boolean isFailure;
+    private Long vaultId;
 
     @Override
     public String toString() {
         return "InputMessage{" +
                 "date=" + date +
-                ", failure=" + failure +
-                ", vault_id=" + vault_id +
+                ", isFailure=" + isFailure +
+                ", vaultId=" + vaultId +
                 '}';
     }
 }

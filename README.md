@@ -1,0 +1,1 @@
+docker exec -it broker kafka-console-consumer --topic debs-topic --bootstrap-server broker:29092 --from-beginning
