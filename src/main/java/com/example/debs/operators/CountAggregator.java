@@ -8,12 +8,12 @@ public class CountAggregator implements AggregateFunction<InputMessage, Tuple2<L
 
     @Override
     public Tuple2<Long, Long> createAccumulator() {
-        return Tuple2.of(0L, 0L);
+        return new Tuple2<>(0L, 0L);
     }
 
     @Override
-    public Tuple2<Long, Long> add(InputMessage value, Tuple2<Long, Long> accumulator) {
-        return Tuple2.of(value.getVaultId(), accumulator.f1 + 1L);
+    public Tuple2<Long, Long> add(InputMessage inputMessage, Tuple2<Long, Long> accumulator) {
+        return new Tuple2<>(inputMessage.getVaultId(), accumulator.f1 + 1L);
     }
 
     @Override
@@ -23,6 +23,6 @@ public class CountAggregator implements AggregateFunction<InputMessage, Tuple2<L
 
     @Override
     public Tuple2<Long, Long> merge(Tuple2<Long, Long> a, Tuple2<Long, Long> b) {
-        return Tuple2.of(a.f0, a.f1 + b.f1);
+        return new Tuple2<>(a.f0, a.f1 + b.f1);
     }
 }

@@ -11,8 +11,6 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
 
 public class InputMessageDeserializer implements KafkaRecordDeserializationSchema<InputMessage> {
 
@@ -22,8 +20,8 @@ public class InputMessageDeserializer implements KafkaRecordDeserializationSchem
         InputMessageDto inputMessageDto = objectMapper.readValue(consumerRecord.value(), InputMessageDto.class);
 
         InputMessage inputMessage = new InputMessage();
-        LocalDateTime date = LocalDateTime.ofEpochSecond(inputMessageDto.getDate(), 0, ZoneOffset.UTC);
-        inputMessage.setDate(date);
+        Instant instant = Instant.ofEpochMilli(inputMessageDto.getDate() * 1000);
+        inputMessage.setDate(instant);
         inputMessage.setIsFailure(inputMessageDto.getFailure().equals(1L));
         inputMessage.setVaultId(inputMessageDto.getVault_id());
         collector.collect(inputMessage);

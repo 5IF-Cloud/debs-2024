@@ -5,14 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public class InputMessage {
-    private LocalDateTime date;
+    private Instant date;
     private Boolean isFailure;
     private Long vaultId;
 
@@ -23,5 +23,9 @@ public class InputMessage {
                 ", isFailure=" + isFailure +
                 ", vaultId=" + vaultId +
                 '}';
+    }
+
+    public long getEventTimeEpochMilli() {
+        return date.toEpochMilli();
     }
 }
