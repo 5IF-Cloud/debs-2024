@@ -5,7 +5,6 @@ import org.apache.flink.streaming.api.functions.AssignerWithPunctuatedWatermarks
 import org.apache.flink.streaming.api.watermark.Watermark;
 
 import javax.annotation.Nullable;
-import java.time.ZoneId;
 
 public class InputMessageTimestampAssigner implements AssignerWithPunctuatedWatermarks<InputMessage> {
     @Nullable
@@ -16,7 +15,6 @@ public class InputMessageTimestampAssigner implements AssignerWithPunctuatedWate
 
     @Override
     public long extractTimestamp(InputMessage message, long previousElementTimestamp) {
-        ZoneId zoneId = ZoneId.of("UTC");
-        return message.getDate().atZone(zoneId).toEpochSecond() * 1000;
+        return message.getEventTimeEpochMilli();
     }
 }
