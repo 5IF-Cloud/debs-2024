@@ -5,14 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public class InputMessage {
-    private Instant date;
+    private LocalDateTime date;
     private Boolean isFailure;
     private Long vaultId;
 
@@ -26,6 +27,7 @@ public class InputMessage {
     }
 
     public long getEventTimeEpochMilli() {
-        return date.toEpochMilli();
+        ZoneId zoneId = ZoneId.of("UTC");
+        return date.atZone(zoneId).toEpochSecond() * 1000;
     }
 }

@@ -11,7 +11,6 @@ public class Consumer {
         Properties properties = new Properties();
         properties.setProperty("bootstrap.servers", kafkaAddress);
         properties.setProperty("group.id", kafkaGroup);
-        properties.setProperty("auto.offset.reset", "earliest");
         FlinkKafkaConsumer<InputMessage> consumer = new FlinkKafkaConsumer<>(topic, new InputMessageDeserializerSchema(), properties);
         return consumer;
     }

@@ -18,7 +18,7 @@ public class InputMessageDeserializerSchema implements DeserializationSchema<Inp
         ObjectMapper objectMapper = new ObjectMapper();
         InputMessageDto inputMessageDto = objectMapper.readValue(bytes, InputMessageDto.class);
         InputMessage inputMessage = new InputMessage();
-        Instant date = Instant.ofEpochMilli(inputMessageDto.getDate() * 1000);
+        LocalDateTime date = LocalDateTime.ofEpochSecond(inputMessageDto.getDate(), 0, ZoneOffset.UTC);
         inputMessage.setDate(date);
         inputMessage.setIsFailure(inputMessageDto.getFailure().equals(1L));
         inputMessage.setVaultId(inputMessageDto.getVault_id());
