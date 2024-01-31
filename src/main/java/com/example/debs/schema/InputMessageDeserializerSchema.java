@@ -20,7 +20,7 @@ public class InputMessageDeserializerSchema implements DeserializationSchema<Inp
         InputMessage inputMessage = new InputMessage();
         LocalDateTime date = LocalDateTime.ofEpochSecond(inputMessageDto.getDate(), 0, ZoneOffset.UTC);
         inputMessage.setDate(date);
-        inputMessage.setIsFailure(inputMessageDto.getFailure().equals(1L));
+        inputMessage.setFailure(inputMessageDto.getFailure());
         inputMessage.setVaultId(inputMessageDto.getVault_id());
         return inputMessage;
     }

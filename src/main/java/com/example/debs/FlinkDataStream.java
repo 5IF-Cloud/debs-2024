@@ -1,6 +1,6 @@
 package com.example.debs;
 
-import com.example.debs.operators.CountAggregator;
+import com.example.debs.operators.SumAggregator;
 import com.example.debs.operators.InputMessageTimestampAssigner;
 import com.example.debs.operators.MyProcessWindowFunction;
 import org.apache.flink.api.java.tuple.Tuple3;
@@ -38,12 +38,12 @@ public class FlinkDataStream {
         // count a number of failures per vaultId
         // sliding window size is 30 days sliding every 1 day
         // print the result to the console
-        DataStream<InputMessage> failures = inputMessageDataStream.filter(InputMessage::getIsFailure);
+        // Apply the SumAggregator to the input stream
 
-        DataStream<Tuple3<Long, Long, Long>> failuresPerVaultId = failures
+        DataStream<Tuple3<Long, Long, Long>> failuresPerVaultId = inputMessageDataStream
                 .keyBy(InputMessage::getVaultId)
                 .window(SlidingEventTimeWindows.of(Time.days(30), Time.days(1)))
-                .aggregate(new CountAggregator(), new MyProcessWindowFunction());
+                .aggregate(new SumAggregator(), new MyProcessWindowFunction());
 
         failuresPerVaultId.addSink(printSinkFunction);
 
