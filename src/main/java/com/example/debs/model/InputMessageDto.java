@@ -12,5 +12,5 @@ import lombok.Setter;
 public class InputMessageDto {
     private Long date;
     private Long failure;
-    private Long vault_id;
+    private String model;
 }

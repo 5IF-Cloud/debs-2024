@@ -15,14 +15,14 @@ import java.time.ZoneId;
 public class InputMessage {
     private LocalDateTime date;
     private Boolean isFailure;
-    private Long vaultId;
+    private String model;
 
     @Override
     public String toString() {
         return "InputMessage{" +
                 "date=" + date +
                 ", isFailure=" + isFailure +
-                ", vaultId=" + vaultId +
+                ", model='" + model +
                 '}';
     }
 

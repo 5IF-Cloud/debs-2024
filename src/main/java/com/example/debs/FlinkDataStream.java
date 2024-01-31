@@ -21,7 +21,7 @@ public class FlinkDataStream {
         String topic = "debs-topic";
         String consumerGroup = "debs-consumer-group";
         String kafkaAddress = "localhost:29092";
-        PrintSinkFunction<Tuple3<Long, Long, Long>> printSinkFunction = new PrintSinkFunction<>();
+        PrintSinkFunction<Tuple3<Long, String, Long>> printSinkFunction = new PrintSinkFunction<>();
 
         StreamExecutionEnvironment environment = StreamExecutionEnvironment.getExecutionEnvironment();
         environment.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
@@ -40,8 +40,8 @@ public class FlinkDataStream {
         // print the result to the console
         DataStream<InputMessage> failures = inputMessageDataStream.filter(InputMessage::getIsFailure);
 
-        DataStream<Tuple3<Long, Long, Long>> failuresPerVaultId = failures
-                .keyBy(InputMessage::getVaultId)
+        DataStream<Tuple3<Long, String, Long>> failuresPerVaultId = failures
+                .keyBy(InputMessage::getModel)
                 .window(SlidingEventTimeWindows.of(Time.days(30), Time.days(1)))
                 .aggregate(new CountAggregator(), new MyProcessWindowFunction());
 

@@ -21,7 +21,7 @@ public class InputMessageDeserializerSchema implements DeserializationSchema<Inp
         LocalDateTime date = LocalDateTime.ofEpochSecond(inputMessageDto.getDate(), 0, ZoneOffset.UTC);
         inputMessage.setDate(date);
         inputMessage.setIsFailure(inputMessageDto.getFailure().equals(1L));
-        inputMessage.setVaultId(inputMessageDto.getVault_id());
+        inputMessage.setModel(inputMessageDto.getModel());
         return inputMessage;
     }
 

@@ -7,11 +7,11 @@ import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 
-public class MyProcessWindowFunction extends ProcessWindowFunction<Tuple2<Long, Long>, Tuple3<Long, Long, Long>, Long, TimeWindow> {
+public class MyProcessWindowFunction extends ProcessWindowFunction<Tuple2<String, Long>, Tuple3<Long, String, Long>, String, TimeWindow> {
 
     @Override
-    public void process(Long key, Context context, Iterable<Tuple2<Long, Long>> nbFailuresByVault, Collector<Tuple3<Long, Long, Long>> output) {
-        for (Tuple2<Long, Long> nbFailures : nbFailuresByVault) {
+    public void process(String key, Context context, Iterable<Tuple2<String, Long>> nbFailuresByModel, Collector<Tuple3<Long, String, Long>> output) {
+        for (Tuple2<String, Long> nbFailures : nbFailuresByModel) {
             output.collect(new Tuple3<>(context.window().getStart(), key, nbFailures.f1));
         }
     }
