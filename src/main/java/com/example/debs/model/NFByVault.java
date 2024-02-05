@@ -15,7 +15,6 @@ public class NFByVault {
     private LocalDateTime startTimeWindow;
     private Long vaultId;
     private Long numberOfFailures;
-    private Long clusterId;
 
     @Override
     public String toString() {
@@ -23,7 +22,6 @@ public class NFByVault {
                 "startTimeWindow=" + startTimeWindow +
                 ", vaultId=" + vaultId +
                 ", numberOfFailures=" + numberOfFailures +
-                ", clusterId=" + clusterId +
                 '}';
     }
 }

@@ -1,18 +1,26 @@
 package com.example.debs.operators;
 
-import com.example.debs.model.InputMessage;
+import com.example.debs.model.NFByVault;
 import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 
-public class MyProcessWindowFunction extends ProcessWindowFunction<Tuple2<Long, Long>, Tuple3<Long, Long, Long>, Long, TimeWindow> {
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+
+public class MyProcessWindowFunction extends ProcessWindowFunction<Tuple2<Long, Long>, NFByVault, Long, TimeWindow> {
 
     @Override
-    public void process(Long key, Context context, Iterable<Tuple2<Long, Long>> nbFailuresByVault, Collector<Tuple3<Long, Long, Long>> output) {
+    public void process(Long key, Context context, Iterable<Tuple2<Long, Long>> nbFailuresByVault, Collector<NFByVault> output) {
         for (Tuple2<Long, Long> nbFailures : nbFailuresByVault) {
-            output.collect(new Tuple3<>(context.window().getStart(), key, nbFailures.f1));
+            // Convert start time window to LocalDateTime
+            long startTimeWindow = context.window().getStart();
+            // Convert Long milliseconds to LocalDateTime
+            LocalDateTime startTime = LocalDateTime.ofEpochSecond(startTimeWindow / 1000, 0, ZoneOffset.UTC);
+
+            NFByVault nfByVault = new NFByVault(startTime, key, nbFailures.f1);
+            output.collect(nfByVault);
         }
     }
 }

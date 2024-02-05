@@ -3,7 +3,7 @@ package com.example.debs;
 import com.example.debs.model.InputMessage;
 import com.example.debs.model.NFByVault;
 import com.example.debs.operators.InputMessageTimestampAssigner;
-import com.example.debs.operators.NewProcessWindowFunction;
+import com.example.debs.operators.MyProcessWindowFunction;
 import com.example.debs.operators.SumAggregator;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -42,7 +42,7 @@ public class Q1DataStream {
         DataStream<NFByVault> failuresPerVaultId = inputMessageDataStream
                 .keyBy(InputMessage::getVaultId)
                 .window(SlidingEventTimeWindows.of(Time.days(30), Time.days(1)))
-                .aggregate(new SumAggregator(), new NewProcessWindowFunction());
+                .aggregate(new SumAggregator(), new MyProcessWindowFunction());
 
         failuresPerVaultId.addSink(printSinkFunction);
 
