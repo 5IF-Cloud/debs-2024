@@ -2,11 +2,16 @@ package com.example.debs;
 
 import com.example.debs.model.ClusteredHardware;
 import com.example.debs.model.InputMessage;
+import com.example.debs.model.TimeCentroid;
 import com.example.debs.operators.InputMessageTimestampAssigner;
+import com.example.debs.operators.MyProcessWindowFunction2;
+import com.example.debs.operators.SumAggregator2;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.PrintSinkFunction;
+import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
+import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 
 import java.io.BufferedReader;
@@ -74,7 +79,7 @@ public class Q2DataStream {
         String topic = "debs-topic";
         String consumerGroup = "debs-consumer-group";
         String kafkaAddress = "localhost:29092";
-        PrintSinkFunction<ClusteredHardware> printSinkFunction = new PrintSinkFunction<>();
+        PrintSinkFunction<TimeCentroid> printSinkFunction = new PrintSinkFunction<>();
 
         StreamExecutionEnvironment environment = StreamExecutionEnvironment.getExecutionEnvironment();
         environment.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
@@ -229,12 +234,51 @@ public class Q2DataStream {
                     clusteredHardware.setModel(inputMessage.getModel());
                     clusteredHardware.setFailure(inputMessage.getFailure());
                     clusteredHardware.setVaultId(inputMessage.getVaultId());
+                    clusteredHardware.setS1_read_error_rate(inputMessage.getS1_read_error_rate());
+                    clusteredHardware.setS2_throughput_performance(inputMessage.getS2_throughput_performance());
+                    clusteredHardware.setS3_spin_up_time(inputMessage.getS3_spin_up_time());
+                    clusteredHardware.setS4_start_stop_count(inputMessage.getS4_start_stop_count());
+                    clusteredHardware.setS5_reallocated_sector_count(inputMessage.getS5_reallocated_sector_count());
+                    clusteredHardware.setS7_seek_error_rate(inputMessage.getS7_seek_error_rate());
+                    clusteredHardware.setS8_seek_time_performance(inputMessage.getS8_seek_time_performance());
+                    clusteredHardware.setS9_power_on_hours(inputMessage.getS9_power_on_hours());
+                    clusteredHardware.setS10_spin_retry_count(inputMessage.getS10_spin_retry_count());
+                    clusteredHardware.setS12_power_cycle_count(inputMessage.getS12_power_cycle_count());
+                    clusteredHardware.setS173_wear_leveling_count(inputMessage.getS173_wear_leveling_count());
+                    clusteredHardware.setS174_unexpected_power_loss_count(inputMessage.getS174_unexpected_power_loss_count());
+                    clusteredHardware.setS183_sata_downshift_count(inputMessage.getS183_sata_downshift_count());
+                    clusteredHardware.setS187_reported_uncorrectable_errors(inputMessage.getS187_reported_uncorrectable_errors());
+                    clusteredHardware.setS188_command_timeout(inputMessage.getS188_command_timeout());
+                    clusteredHardware.setS189_high_fly_writes(inputMessage.getS189_high_fly_writes());
+                    clusteredHardware.setS190_airflow_temperature_cel(inputMessage.getS190_airflow_temperature_cel());
+                    clusteredHardware.setS191_g_sense_error_rate(inputMessage.getS191_g_sense_error_rate());
+                    clusteredHardware.setS192_power_off_retract_count(inputMessage.getS192_power_off_retract_count());
+                    clusteredHardware.setS193_load_unload_cycle_count(inputMessage.getS193_load_unload_cycle_count());
+                    clusteredHardware.setS194_temperature_celsius(inputMessage.getS194_temperature_celsius());
+                    clusteredHardware.setS195_hardware_ecc_recovered(inputMessage.getS195_hardware_ecc_recovered());
+                    clusteredHardware.setS196_reallocated_event_count(inputMessage.getS196_reallocated_event_count());
+                    clusteredHardware.setS197_current_pending_sector(inputMessage.getS197_current_pending_sector());
+                    clusteredHardware.setS198_offline_uncorrectable(inputMessage.getS198_offline_uncorrectable());
+                    clusteredHardware.setS199_udma_crc_error_count(inputMessage.getS199_udma_crc_error_count());
+                    clusteredHardware.setS200_multi_zone_error_rate(inputMessage.getS200_multi_zone_error_rate());
+                    clusteredHardware.setS220_disk_shift(inputMessage.getS220_disk_shift());
+                    clusteredHardware.setS222_loaded_hours(inputMessage.getS222_loaded_hours());
+                    clusteredHardware.setS223_load_retry_count(inputMessage.getS223_load_retry_count());
+                    clusteredHardware.setS226_load_in_time(inputMessage.getS226_load_in_time());
+                    clusteredHardware.setS240_head_flying_hours(inputMessage.getS240_head_flying_hours());
+                    clusteredHardware.setS241_total_lbas_written(inputMessage.getS241_total_lbas_written());
+                    clusteredHardware.setS242_total_lbas_read(inputMessage.getS242_total_lbas_read());
                     clusteredHardware.setClusterId(cluster);
                     return clusteredHardware;
                 });
 
+        DataStream<TimeCentroid> timeCentroidDataStream = clusteredHardwareDataStream
+                .keyBy(ClusteredHardware::getClusterId)
+                .window(SlidingEventTimeWindows.of(Time.days(30), Time.days(1)))
+                .aggregate(new SumAggregator2(), new MyProcessWindowFunction2());
+
         // Print the result
-        clusteredHardwareDataStream.addSink(printSinkFunction);
+        timeCentroidDataStream.addSink(printSinkFunction);
 
         // execute the pipeline and return the result
         environment.execute("Q2 Debs Flink Data Stream");

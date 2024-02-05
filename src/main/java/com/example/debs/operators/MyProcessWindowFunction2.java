@@ -1,0 +1,128 @@
+package com.example.debs.operators;
+
+import com.example.debs.model.Centroid;
+import com.example.debs.model.TimeCentroid;
+import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
+import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
+import org.apache.flink.util.Collector;
+
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+
+public class MyProcessWindowFunction2 extends ProcessWindowFunction<Centroid, TimeCentroid, Long, TimeWindow> {
+    @Override
+    public void process(Long key, Context context, Iterable<Centroid> input, Collector<TimeCentroid> out) {
+        Centroid centroid = new Centroid();
+        centroid.setClusterId(input.iterator().next().getClusterId());
+        centroid.setS1_read_error_rate(0.0);
+        centroid.setS2_throughput_performance(0.0);
+        centroid.setS3_spin_up_time(0.0);
+        centroid.setS4_start_stop_count(0.0);
+        centroid.setS5_reallocated_sector_count(0.0);
+        centroid.setS7_seek_error_rate(0.0);
+        centroid.setS8_seek_time_performance(0.0);
+        centroid.setS9_power_on_hours(0.0);
+        centroid.setS10_spin_retry_count(0.0);
+        centroid.setS12_power_cycle_count(0.0);
+        centroid.setS173_wear_leveling_count(0.0);
+        centroid.setS174_unexpected_power_loss_count(0.0);
+        centroid.setS183_sata_downshift_count(0.0);
+        centroid.setS187_reported_uncorrectable_errors(0.0);
+        centroid.setS188_command_timeout(0.0);
+        centroid.setS189_high_fly_writes(0.0);
+        centroid.setS190_airflow_temperature_cel(0.0);
+        centroid.setS191_g_sense_error_rate(0.0);
+        centroid.setS192_power_off_retract_count(0.0);
+        centroid.setS193_load_unload_cycle_count(0.0);
+        centroid.setS194_temperature_celsius(0.0);
+        centroid.setS195_hardware_ecc_recovered(0.0);
+        centroid.setS196_reallocated_event_count(0.0);
+        centroid.setS197_current_pending_sector(0.0);
+        centroid.setS198_offline_uncorrectable(0.0);
+        centroid.setS199_udma_crc_error_count(0.0);
+        centroid.setS200_multi_zone_error_rate(0.0);
+        centroid.setS220_disk_shift(0.0);
+        centroid.setS222_loaded_hours(0.0);
+        centroid.setS223_load_retry_count(0.0);
+        centroid.setS226_load_in_time(0.0);
+        centroid.setS240_head_flying_hours(0.0);
+        centroid.setS241_total_lbas_written(0.0);
+        centroid.setS242_total_lbas_read(0.0);
+        for (Centroid in : input) {
+            centroid.setS1_read_error_rate(centroid.getS1_read_error_rate() + in.getS1_read_error_rate() / input.spliterator().estimateSize());
+            centroid.setS2_throughput_performance(centroid.getS2_throughput_performance() + in.getS2_throughput_performance() / input.spliterator().estimateSize());
+            centroid.setS3_spin_up_time(centroid.getS3_spin_up_time() + in.getS3_spin_up_time() / input.spliterator().estimateSize());
+            centroid.setS4_start_stop_count(centroid.getS4_start_stop_count() + in.getS4_start_stop_count() / input.spliterator().estimateSize());
+            centroid.setS5_reallocated_sector_count(centroid.getS5_reallocated_sector_count() + in.getS5_reallocated_sector_count() / input.spliterator().estimateSize());
+            centroid.setS7_seek_error_rate(centroid.getS7_seek_error_rate() + in.getS7_seek_error_rate() / input.spliterator().estimateSize());
+            centroid.setS8_seek_time_performance(centroid.getS8_seek_time_performance() + in.getS8_seek_time_performance() / input.spliterator().estimateSize());
+            centroid.setS9_power_on_hours(centroid.getS9_power_on_hours() + in.getS9_power_on_hours() / input.spliterator().estimateSize());
+            centroid.setS10_spin_retry_count(centroid.getS10_spin_retry_count() + in.getS10_spin_retry_count() / input.spliterator().estimateSize());
+            centroid.setS12_power_cycle_count(centroid.getS12_power_cycle_count() + in.getS12_power_cycle_count() / input.spliterator().estimateSize());
+            centroid.setS173_wear_leveling_count(centroid.getS173_wear_leveling_count() + in.getS173_wear_leveling_count() / input.spliterator().estimateSize());
+            centroid.setS174_unexpected_power_loss_count(centroid.getS174_unexpected_power_loss_count() + in.getS174_unexpected_power_loss_count() / input.spliterator().estimateSize());
+            centroid.setS183_sata_downshift_count(centroid.getS183_sata_downshift_count() + in.getS183_sata_downshift_count() / input.spliterator().estimateSize());
+            centroid.setS187_reported_uncorrectable_errors(centroid.getS187_reported_uncorrectable_errors() + in.getS187_reported_uncorrectable_errors() / input.spliterator().estimateSize());
+            centroid.setS188_command_timeout(centroid.getS188_command_timeout() + in.getS188_command_timeout() / input.spliterator().estimateSize());
+            centroid.setS189_high_fly_writes(centroid.getS189_high_fly_writes() + in.getS189_high_fly_writes() / input.spliterator().estimateSize());
+            centroid.setS190_airflow_temperature_cel(centroid.getS190_airflow_temperature_cel() + in.getS190_airflow_temperature_cel() / input.spliterator().estimateSize());
+            centroid.setS191_g_sense_error_rate(centroid.getS191_g_sense_error_rate() + in.getS191_g_sense_error_rate() / input.spliterator().estimateSize());
+            centroid.setS192_power_off_retract_count(centroid.getS192_power_off_retract_count() + in.getS192_power_off_retract_count() / input.spliterator().estimateSize());
+            centroid.setS193_load_unload_cycle_count(centroid.getS193_load_unload_cycle_count() + in.getS193_load_unload_cycle_count() / input.spliterator().estimateSize());
+            centroid.setS194_temperature_celsius(centroid.getS194_temperature_celsius() + in.getS194_temperature_celsius() / input.spliterator().estimateSize());
+            centroid.setS195_hardware_ecc_recovered(centroid.getS195_hardware_ecc_recovered() + in.getS195_hardware_ecc_recovered() / input.spliterator().estimateSize());
+            centroid.setS196_reallocated_event_count(centroid.getS196_reallocated_event_count() + in.getS196_reallocated_event_count() / input.spliterator().estimateSize());
+            centroid.setS197_current_pending_sector(centroid.getS197_current_pending_sector() + in.getS197_current_pending_sector() / input.spliterator().estimateSize());
+            centroid.setS198_offline_uncorrectable(centroid.getS198_offline_uncorrectable() + in.getS198_offline_uncorrectable() / input.spliterator().estimateSize());
+            centroid.setS199_udma_crc_error_count(centroid.getS199_udma_crc_error_count() + in.getS199_udma_crc_error_count() / input.spliterator().estimateSize());
+            centroid.setS200_multi_zone_error_rate(centroid.getS200_multi_zone_error_rate() + in.getS200_multi_zone_error_rate() / input.spliterator().estimateSize());
+            centroid.setS220_disk_shift(centroid.getS220_disk_shift() + in.getS220_disk_shift() / input.spliterator().estimateSize());
+            centroid.setS222_loaded_hours(centroid.getS222_loaded_hours() + in.getS222_loaded_hours() / input.spliterator().estimateSize());
+            centroid.setS223_load_retry_count(centroid.getS223_load_retry_count() + in.getS223_load_retry_count() / input.spliterator().estimateSize());
+            centroid.setS226_load_in_time(centroid.getS226_load_in_time() + in.getS226_load_in_time() / input.spliterator().estimateSize());
+            centroid.setS240_head_flying_hours(centroid.getS240_head_flying_hours() + in.getS240_head_flying_hours() / input.spliterator().estimateSize());
+            centroid.setS241_total_lbas_written(centroid.getS241_total_lbas_written() + in.getS241_total_lbas_written() / input.spliterator().estimateSize());
+            centroid.setS242_total_lbas_read(centroid.getS242_total_lbas_read() + in.getS242_total_lbas_read() / input.spliterator().estimateSize());
+        }
+        TimeCentroid timeCentroid = new TimeCentroid();
+        // Set dayEnd to startWindow + 1 day
+        LocalDateTime dayEnd = LocalDateTime.ofEpochSecond(context.window().getStart() / 1000 + 86400, 0, ZoneOffset.UTC);
+        timeCentroid.setDayEnd(dayEnd);
+        timeCentroid.setClusterId(centroid.getClusterId());
+        timeCentroid.setS1_read_error_rate(centroid.getS1_read_error_rate());
+        timeCentroid.setS2_throughput_performance(centroid.getS2_throughput_performance());
+        timeCentroid.setS3_spin_up_time(centroid.getS3_spin_up_time());
+        timeCentroid.setS4_start_stop_count(centroid.getS4_start_stop_count());
+        timeCentroid.setS5_reallocated_sector_count(centroid.getS5_reallocated_sector_count());
+        timeCentroid.setS7_seek_error_rate(centroid.getS7_seek_error_rate());
+        timeCentroid.setS8_seek_time_performance(centroid.getS8_seek_time_performance());
+        timeCentroid.setS9_power_on_hours(centroid.getS9_power_on_hours());
+        timeCentroid.setS10_spin_retry_count(centroid.getS10_spin_retry_count());
+        timeCentroid.setS12_power_cycle_count(centroid.getS12_power_cycle_count());
+        timeCentroid.setS173_wear_leveling_count(centroid.getS173_wear_leveling_count());
+        timeCentroid.setS174_unexpected_power_loss_count(centroid.getS174_unexpected_power_loss_count());
+        timeCentroid.setS183_sata_downshift_count(centroid.getS183_sata_downshift_count());
+        timeCentroid.setS187_reported_uncorrectable_errors(centroid.getS187_reported_uncorrectable_errors());
+        timeCentroid.setS188_command_timeout(centroid.getS188_command_timeout());
+        timeCentroid.setS189_high_fly_writes(centroid.getS189_high_fly_writes());
+        timeCentroid.setS190_airflow_temperature_cel(centroid.getS190_airflow_temperature_cel());
+        timeCentroid.setS191_g_sense_error_rate(centroid.getS191_g_sense_error_rate());
+        timeCentroid.setS192_power_off_retract_count(centroid.getS192_power_off_retract_count());
+        timeCentroid.setS193_load_unload_cycle_count(centroid.getS193_load_unload_cycle_count());
+        timeCentroid.setS194_temperature_celsius(centroid.getS194_temperature_celsius());
+        timeCentroid.setS195_hardware_ecc_recovered(centroid.getS195_hardware_ecc_recovered());
+        timeCentroid.setS196_reallocated_event_count(centroid.getS196_reallocated_event_count());
+        timeCentroid.setS197_current_pending_sector(centroid.getS197_current_pending_sector());
+        timeCentroid.setS198_offline_uncorrectable(centroid.getS198_offline_uncorrectable());
+        timeCentroid.setS199_udma_crc_error_count(centroid.getS199_udma_crc_error_count());
+        timeCentroid.setS200_multi_zone_error_rate(centroid.getS200_multi_zone_error_rate());
+        timeCentroid.setS220_disk_shift(centroid.getS220_disk_shift());
+        timeCentroid.setS222_loaded_hours(centroid.getS222_loaded_hours());
+        timeCentroid.setS223_load_retry_count(centroid.getS223_load_retry_count());
+        timeCentroid.setS226_load_in_time(centroid.getS226_load_in_time());
+        timeCentroid.setS240_head_flying_hours(centroid.getS240_head_flying_hours());
+        timeCentroid.setS241_total_lbas_written(centroid.getS241_total_lbas_written());
+        timeCentroid.setS242_total_lbas_read(centroid.getS242_total_lbas_read());
+        out.collect(timeCentroid);
+    }
+}
