@@ -47,6 +47,6 @@ public class Q1DataStream {
         failuresPerVaultId.addSink(printSinkFunction);
 
         // execute the pipeline and return the result
-        environment.execute("Debs Flink Data Stream");
+        environment.execute("Q1 Debs Flink Data Stream");
     }
 }
