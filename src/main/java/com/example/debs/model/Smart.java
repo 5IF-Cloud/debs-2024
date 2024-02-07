@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import javax.annotation.Nullable;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -81,6 +83,43 @@ public class Smart implements Serializable {
     private Double s241_total_lbas_written;
     @Nullable
     private Double s242_total_lbas_read;
+
+    public Smart(double[] val) {
+        this.s1_read_error_rate = val[0];
+        this.s2_throughput_performance = val[1];
+        this.s3_spin_up_time = val[2];
+        this.s4_start_stop_count = val[3];
+        this.s5_reallocated_sector_count = val[4];
+        this.s7_seek_error_rate = val[5];
+        this.s8_seek_time_performance = val[6];
+        this.s9_power_on_hours = val[7];
+        this.s10_spin_retry_count = val[8];
+        this.s12_power_cycle_count = val[9];
+        this.s173_wear_leveling_count = val[10];
+        this.s174_unexpected_power_loss_count = val[11];
+        this.s183_sata_downshift_count = val[12];
+        this.s187_reported_uncorrectable_errors = val[13];
+        this.s188_command_timeout = val[14];
+        this.s189_high_fly_writes = val[15];
+        this.s190_airflow_temperature_cel = val[16];
+        this.s191_g_sense_error_rate = val[17];
+        this.s192_power_off_retract_count = val[18];
+        this.s193_load_unload_cycle_count = val[19];
+        this.s194_temperature_celsius = val[20];
+        this.s195_hardware_ecc_recovered = val[21];
+        this.s196_reallocated_event_count = val[22];
+        this.s197_current_pending_sector = val[23];
+        this.s198_offline_uncorrectable = val[24];
+        this.s199_udma_crc_error_count = val[25];
+        this.s200_multi_zone_error_rate = val[26];
+        this.s220_disk_shift = val[27];
+        this.s222_loaded_hours = val[28];
+        this.s223_load_retry_count = val[29];
+        this.s226_load_in_time = val[30];
+        this.s240_head_flying_hours = val[31];
+        this.s241_total_lbas_written = val[32];
+        this.s242_total_lbas_read = val[33];
+    }
 
     public void initSmart() {
         this.s1_read_error_rate = 0.0;
@@ -279,5 +318,113 @@ public class Smart implements Serializable {
                 Math.pow(this.s241_total_lbas_written - smart2.s241_total_lbas_written, 2) +
                 Math.pow(this.s242_total_lbas_read - smart2.s242_total_lbas_read, 2)
         );
+    }
+
+    public double infinityNorm(Smart smart2) {
+        // get rid of negative values in this Smart object and smart2
+        List<Double> diff = new ArrayList<>();
+        if (this.s1_read_error_rate >= 0 && smart2.s1_read_error_rate >= 0) {
+            diff.add(Math.abs(this.s1_read_error_rate - smart2.s1_read_error_rate));
+        }
+        if (this.s2_throughput_performance >= 0 && smart2.s2_throughput_performance >= 0) {
+            diff.add(Math.abs(this.s2_throughput_performance - smart2.s2_throughput_performance));
+        }
+        if (this.s3_spin_up_time >= 0 && smart2.s3_spin_up_time >= 0) {
+            diff.add(Math.abs(this.s3_spin_up_time - smart2.s3_spin_up_time));
+        }
+        if (this.s4_start_stop_count >= 0 && smart2.s4_start_stop_count >= 0) {
+            diff.add(Math.abs(this.s4_start_stop_count - smart2.s4_start_stop_count));
+        }
+        if (this.s5_reallocated_sector_count >= 0 && smart2.s5_reallocated_sector_count >= 0) {
+            diff.add(Math.abs(this.s5_reallocated_sector_count - smart2.s5_reallocated_sector_count));
+        }
+        if (this.s7_seek_error_rate >= 0 && smart2.s7_seek_error_rate >= 0) {
+            diff.add(Math.abs(this.s7_seek_error_rate - smart2.s7_seek_error_rate));
+        }
+        if (this.s8_seek_time_performance >= 0 && smart2.s8_seek_time_performance >= 0) {
+            diff.add(Math.abs(this.s8_seek_time_performance - smart2.s8_seek_time_performance));
+        }
+        if (this.s9_power_on_hours >= 0 && smart2.s9_power_on_hours >= 0) {
+            diff.add(Math.abs(this.s9_power_on_hours - smart2.s9_power_on_hours));
+        }
+        if (this.s10_spin_retry_count >= 0 && smart2.s10_spin_retry_count >= 0) {
+            diff.add(Math.abs(this.s10_spin_retry_count - smart2.s10_spin_retry_count));
+        }
+        if (this.s12_power_cycle_count >= 0 && smart2.s12_power_cycle_count >= 0) {
+            diff.add(Math.abs(this.s12_power_cycle_count - smart2.s12_power_cycle_count));
+        }
+        if (this.s173_wear_leveling_count >= 0 && smart2.s173_wear_leveling_count >= 0) {
+            diff.add(Math.abs(this.s173_wear_leveling_count - smart2.s173_wear_leveling_count));
+        }
+        if (this.s174_unexpected_power_loss_count >= 0 && smart2.s174_unexpected_power_loss_count >= 0) {
+            diff.add(Math.abs(this.s174_unexpected_power_loss_count - smart2.s174_unexpected_power_loss_count));
+        }
+        if (this.s183_sata_downshift_count >= 0 && smart2.s183_sata_downshift_count >= 0) {
+            diff.add(Math.abs(this.s183_sata_downshift_count - smart2.s183_sata_downshift_count));
+        }
+        if (this.s187_reported_uncorrectable_errors >= 0 && smart2.s187_reported_uncorrectable_errors >= 0) {
+            diff.add(Math.abs(this.s187_reported_uncorrectable_errors - smart2.s187_reported_uncorrectable_errors));
+        }
+        if (this.s188_command_timeout >= 0 && smart2.s188_command_timeout >= 0) {
+            diff.add(Math.abs(this.s188_command_timeout - smart2.s188_command_timeout));
+        }
+        if (this.s189_high_fly_writes >= 0 && smart2.s189_high_fly_writes >= 0) {
+            diff.add(Math.abs(this.s189_high_fly_writes - smart2.s189_high_fly_writes));
+        }
+        if (this.s190_airflow_temperature_cel >= 0 && smart2.s190_airflow_temperature_cel >= 0) {
+            diff.add(Math.abs(this.s190_airflow_temperature_cel - smart2.s190_airflow_temperature_cel));
+        }
+        if (this.s191_g_sense_error_rate >= 0 && smart2.s191_g_sense_error_rate >= 0) {
+            diff.add(Math.abs(this.s191_g_sense_error_rate - smart2.s191_g_sense_error_rate));
+        }
+        if (this.s192_power_off_retract_count >= 0 && smart2.s192_power_off_retract_count >= 0) {
+            diff.add(Math.abs(this.s192_power_off_retract_count - smart2.s192_power_off_retract_count));
+        }
+        if (this.s193_load_unload_cycle_count >= 0 && smart2.s193_load_unload_cycle_count >= 0) {
+            diff.add(Math.abs(this.s193_load_unload_cycle_count - smart2.s193_load_unload_cycle_count));
+        }
+        if (this.s194_temperature_celsius >= 0 && smart2.s194_temperature_celsius >= 0) {
+            diff.add(Math.abs(this.s194_temperature_celsius - smart2.s194_temperature_celsius));
+        }
+        if (this.s195_hardware_ecc_recovered >= 0 && smart2.s195_hardware_ecc_recovered >= 0) {
+            diff.add(Math.abs(this.s195_hardware_ecc_recovered - smart2.s195_hardware_ecc_recovered));
+        }
+        if (this.s196_reallocated_event_count >= 0 && smart2.s196_reallocated_event_count >= 0) {
+            diff.add(Math.abs(this.s196_reallocated_event_count - smart2.s196_reallocated_event_count));
+        }
+        if (this.s197_current_pending_sector >= 0 && smart2.s197_current_pending_sector >= 0) {
+            diff.add(Math.abs(this.s197_current_pending_sector - smart2.s197_current_pending_sector));
+        }
+        if (this.s198_offline_uncorrectable >= 0 && smart2.s198_offline_uncorrectable >= 0) {
+            diff.add(Math.abs(this.s198_offline_uncorrectable - smart2.s198_offline_uncorrectable));
+        }
+        if (this.s199_udma_crc_error_count >= 0 && smart2.s199_udma_crc_error_count >= 0) {
+            diff.add(Math.abs(this.s199_udma_crc_error_count - smart2.s199_udma_crc_error_count));
+        }
+        if (this.s200_multi_zone_error_rate >= 0 && smart2.s200_multi_zone_error_rate >= 0) {
+            diff.add(Math.abs(this.s200_multi_zone_error_rate - smart2.s200_multi_zone_error_rate));
+        }
+        if (this.s220_disk_shift >= 0 && smart2.s220_disk_shift >= 0) {
+            diff.add(Math.abs(this.s220_disk_shift - smart2.s220_disk_shift));
+        }
+        if (this.s222_loaded_hours >= 0 && smart2.s222_loaded_hours >= 0) {
+            diff.add(Math.abs(this.s222_loaded_hours - smart2.s222_loaded_hours));
+        }
+        if (this.s223_load_retry_count >= 0 && smart2.s223_load_retry_count >= 0) {
+            diff.add(Math.abs(this.s223_load_retry_count - smart2.s223_load_retry_count));
+        }
+        if (this.s226_load_in_time >= 0 && smart2.s226_load_in_time >= 0) {
+            diff.add(Math.abs(this.s226_load_in_time - smart2.s226_load_in_time));
+        }
+        if (this.s240_head_flying_hours >= 0 && smart2.s240_head_flying_hours >= 0) {
+            diff.add(Math.abs(this.s240_head_flying_hours - smart2.s240_head_flying_hours));
+        }
+        if (this.s241_total_lbas_written >= 0 && smart2.s241_total_lbas_written >= 0) {
+            diff.add(Math.abs(this.s241_total_lbas_written - smart2.s241_total_lbas_written));
+        }
+        if (this.s242_total_lbas_read >= 0 && smart2.s242_total_lbas_read >= 0) {
+            diff.add(Math.abs(this.s242_total_lbas_read - smart2.s242_total_lbas_read));
+        }
+        return diff.stream().mapToDouble(Double::doubleValue).max().orElse(0.0);
     }
 }

@@ -3,7 +3,7 @@ package com.example.debs;
 import com.example.debs.model.*;
 import com.example.debs.operators.InputMessageTimestampAssigner;
 import com.example.debs.operators.MyProcessWindowFunction2;
-import com.example.debs.operators.SumAggregator2;
+import com.example.debs.operators.AverageAggregator;
 import com.example.debs.scaler.MinMaxScaler;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -89,41 +89,11 @@ public class Q2DataStream {
                 String[] values = line.split(",");
                 Centroid centroid = new Centroid();
                 centroid.setClusterId(Long.valueOf(values[0]));
-                Smart smart = new Smart();
-                smart.setS1_read_error_rate(Double.valueOf(values[1]));
-                smart.setS2_throughput_performance(Double.valueOf(values[2]));
-                smart.setS3_spin_up_time(Double.valueOf(values[3]));
-                smart.setS4_start_stop_count(Double.valueOf(values[4]));
-                smart.setS5_reallocated_sector_count(Double.valueOf(values[5]));
-                smart.setS7_seek_error_rate(Double.valueOf(values[6]));
-                smart.setS8_seek_time_performance(Double.valueOf(values[7]));
-                smart.setS9_power_on_hours(Double.valueOf(values[8]));
-                smart.setS10_spin_retry_count(Double.valueOf(values[9]));
-                smart.setS12_power_cycle_count(Double.valueOf(values[10]));
-                smart.setS173_wear_leveling_count(Double.valueOf(values[11]));
-                smart.setS174_unexpected_power_loss_count(Double.valueOf(values[12]));
-                smart.setS183_sata_downshift_count(Double.valueOf(values[13]));
-                smart.setS187_reported_uncorrectable_errors(Double.valueOf(values[14]));
-                smart.setS188_command_timeout(Double.valueOf(values[15]));
-                smart.setS189_high_fly_writes(Double.valueOf(values[16]));
-                smart.setS190_airflow_temperature_cel(Double.valueOf(values[17]));
-                smart.setS191_g_sense_error_rate(Double.valueOf(values[18]));
-                smart.setS192_power_off_retract_count(Double.valueOf(values[19]));
-                smart.setS193_load_unload_cycle_count(Double.valueOf(values[20]));
-                smart.setS194_temperature_celsius(Double.valueOf(values[21]));
-                smart.setS195_hardware_ecc_recovered(Double.valueOf(values[22]));
-                smart.setS196_reallocated_event_count(Double.valueOf(values[23]));
-                smart.setS197_current_pending_sector(Double.valueOf(values[24]));
-                smart.setS198_offline_uncorrectable(Double.valueOf(values[25]));
-                smart.setS199_udma_crc_error_count(Double.valueOf(values[26]));
-                smart.setS200_multi_zone_error_rate(Double.valueOf(values[27]));
-                smart.setS220_disk_shift(Double.valueOf(values[28]));
-                smart.setS222_loaded_hours(Double.valueOf(values[29]));
-                smart.setS223_load_retry_count(Double.valueOf(values[30]));
-                smart.setS226_load_in_time(Double.valueOf(values[31]));
-                smart.setS240_head_flying_hours(Double.valueOf(values[32]));
-                smart.setS241_total_lbas_written(Double.valueOf(values[33]));
-                smart.setS242_total_lbas_read(Double.valueOf(values[34]));
+                double[] valCentroid = new double[34];
+                for (int j = 1; j < 35; j++) {
+                    valCentroid[j-1] = Double.parseDouble(values[j]);
+                }
+                Smart smart = new Smart(valCentroid);
                 Smart scaledSmart = MinMaxScaler.scale(smart, minMaxValues);
                 centroid.setSmart(scaledSmart);
                 centroids[i-1] = centroid;
@@ -141,7 +111,7 @@ public class Q2DataStream {
                     Smart inputMessageSmart = inputMessage.getSmart();
                     for (int i = 0; i < 50; i++) {
                         Smart centroidSmart = centroids[i].getSmart();
-                        double distance = inputMessageSmart.euclideanDistance(centroidSmart);
+                        double distance = inputMessageSmart.infinityNorm(centroidSmart);
                         if (distance < minDistance) {
                             minDistance = distance;
                             cluster = i;
@@ -161,7 +131,7 @@ public class Q2DataStream {
         DataStream<TimeCentroid> timeCentroidDataStream = clusteredHardwareDataStream
                 .keyBy(ClusteredHardware::getClusterId)
                 .window(SlidingEventTimeWindows.of(Time.days(30), Time.days(1)))
-                .aggregate(new SumAggregator2(), new MyProcessWindowFunction2());
+                .aggregate(new AverageAggregator(), new MyProcessWindowFunction2());
 
 
         // Print the result
