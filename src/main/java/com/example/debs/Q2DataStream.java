@@ -5,10 +5,11 @@ import com.example.debs.operators.InputMessageTimestampAssigner;
 import com.example.debs.operators.MyProcessWindowFunction2;
 import com.example.debs.operators.AverageAggregator;
 import com.example.debs.scaler.MinMaxScaler;
+import org.apache.flink.api.common.serialization.SimpleStringEncoder;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.sink.PrintSinkFunction;
+import org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSink;
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
@@ -24,7 +25,9 @@ public class Q2DataStream {
         String topic = "debs-topic";
         String consumerGroup = "debs-consumer-group";
         String kafkaAddress = "localhost:29092";
-        PrintSinkFunction<TimeCentroid> printSinkFunction = new PrintSinkFunction<>();
+        StreamingFileSink<TimeCentroid> sink = StreamingFileSink
+                .forRowFormat(new org.apache.flink.core.fs.Path("src/main/resources/output"), new SimpleStringEncoder<TimeCentroid>("UTF-8"))
+                .build();
 
         StreamExecutionEnvironment environment = StreamExecutionEnvironment.getExecutionEnvironment();
         environment.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
@@ -94,8 +97,7 @@ public class Q2DataStream {
                     valCentroid[j-1] = Double.parseDouble(values[j]);
                 }
                 Smart smart = new Smart(valCentroid);
-                Smart scaledSmart = MinMaxScaler.scale(smart, minMaxValues);
-                centroid.setSmart(scaledSmart);
+                centroid.setSmart(smart);
                 centroids[i-1] = centroid;
                 i++;
             }
@@ -135,7 +137,7 @@ public class Q2DataStream {
 
 
         // Print the result
-        timeCentroidDataStream.addSink(printSinkFunction);
+        timeCentroidDataStream.addSink(sink);
 
         // execute the pipeline and return the result
         environment.execute("Q2 Debs Flink Data Stream");
