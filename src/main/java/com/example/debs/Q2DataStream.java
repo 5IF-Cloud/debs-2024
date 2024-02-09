@@ -9,6 +9,7 @@ import org.apache.flink.api.common.serialization.SimpleStringEncoder;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.sink.PrintSinkFunction;
 import org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSink;
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
@@ -25,9 +26,7 @@ public class Q2DataStream {
         String topic = "debs-topic";
         String consumerGroup = "debs-consumer-group";
         String kafkaAddress = "localhost:29092";
-        StreamingFileSink<TimeCentroid> sink = StreamingFileSink
-                .forRowFormat(new org.apache.flink.core.fs.Path("src/main/resources/output"), new SimpleStringEncoder<TimeCentroid>("UTF-8"))
-                .build();
+        PrintSinkFunction<TimeCentroid> sink = new PrintSinkFunction<>();
 
         StreamExecutionEnvironment environment = StreamExecutionEnvironment.getExecutionEnvironment();
         environment.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
